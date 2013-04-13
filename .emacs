@@ -15,12 +15,13 @@
 ;; trasparent
 (set-frame-parameter (selected-frame) 'alpha '(85 50))
  (add-to-list 'default-frame-alist '(alpha 85 50))
+;; Set transparency of emacs
 
 ;;---------------------------------------------------------------------------
 ;; Them
-;;(add-to-list 'load-path "/Users/Eespeto/.emacs.d/")
-;;(require 'color-theme)
-;;(require 'color-theme-tomorrow) 
+(add-to-list 'load-path "~/.emacs.d/")
+(require 'color-theme)
+(require 'color-theme-tomorrow) 
 (load "~/.emacs.d/color-theme-tomorrow.el")
 ;;(eval-after-load "color-theme"
 ;;  '(progn
@@ -105,20 +106,20 @@ ispell-extra-args '("--sug-mode=ultra"))
 ;;============================================================================
 
 ;; dired open new buffer
-(add-hook 'dired-mode-hook
- (lambda ()
-  (define-key dired-mode-map (kbd "^")
-    (lambda () (interactive) (find-alternate-file "..")))
-  ; was dired-up-directory
- ))
-;; we want dired not not make always a new buffer if visiting a directory
-;; but using only one dired buffer for all directories.
-(defadvice dired-advertised-find-file (around dired-subst-directory activate)
-"Replace current buffer if file is a directory."
-          (interactive)
-          (let ((orig (current-buffer))
-                (filename (dired-get-filename)))
-            ad-do-it
-            (when (and (file-directory-p filename)
-                       (not (eq (current-buffer) orig)))
-              (kill-buffer orig))))
+(load "~/.emacs.d/dired-single.el")
+(defun my-dired-init ()
+        "Bunch of stuff to run for dired, either immediately or when it's
+         loaded."
+        ;; <add other stuff here>
+        (define-key dired-mode-map [return] 'dired-single-buffer)
+        (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
+        (define-key dired-mode-map "^"
+      	(function
+      	 (lambda nil (interactive) (dired-single-buffer "..")))))
+
+      ;; if dired's already loaded, then the keymap will be bound
+      (if (boundp 'dired-mode-map)
+      	;; we're good to go; just add our bindings
+      	(my-dired-init)
+        ;; it's not loaded yet, so add our bindings to the load-hook
+        (add-hook 'dired-load-hook 'my-dired-init))
