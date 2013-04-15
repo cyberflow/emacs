@@ -123,3 +123,7 @@ ispell-extra-args '("--sug-mode=ultra"))
       	(my-dired-init)
         ;; it's not loaded yet, so add our bindings to the load-hook
         (add-hook 'dired-load-hook 'my-dired-init))
+
+;; git-emacs
+(add-to-list 'load-path "~/.emacs.d")
+(require 'git-emacs)
