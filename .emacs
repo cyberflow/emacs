@@ -19,17 +19,20 @@
 
 ;;---------------------------------------------------------------------------
 ;; Them
+(setq inhibit-startup-message t)
 (add-to-list 'load-path "~/.emacs.d/")
 (require 'color-theme)
 (require 'color-theme-tomorrow) 
 (load "~/.emacs.d/color-theme-tomorrow.el")
-;;(eval-after-load "color-theme"
-;;  '(progn
-     (color-theme-tomorrow-night)
-;;(eval-after-load "color-theme"
-;;  '(progn
-; ;    (color-theme-initialize))
-;)
+(color-theme-tomorrow-night)
+
+;; full-screen mode
+
+
+;; ido-mode
+(setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (ido-mode 1)
 
 ;;=============================================================================
 ;;
